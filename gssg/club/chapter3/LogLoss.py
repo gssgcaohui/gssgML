@@ -7,7 +7,7 @@ import math
 # KL(tctr || pctr)=1/impression * [-click*log(pctr)-(impression-click)*log(1-pctr)+const]
 
 
-
+# 计算LogLoss
 def calcloss(loss, click, pctr):
     for i in range(1, len(click)):
         if ( pctr[i] > 1 or pctr[i] < 0 ): # 过滤非法数据
@@ -17,6 +17,24 @@ def calcloss(loss, click, pctr):
         else:
             loss += -math.log(1 - pctr[i])
     return loss / len(click)
+
+# 计算auc
+# 按照pctr对数组data排序
+auc = 0,tp=0, tp_pre=0,tp=0,fp_pre=0
+last_value = data[0].ptcr
+for i from 0 to N-1:
+    if data[i].label==1:
+        tp += 1
+    else:
+        fp += 1
+    if last_value !=data[i].pctr:
+        auc = (tp+tp_pre) * (fp-fp_pre)/2.0
+        tp_pre=tp_pre=fp_pre
+        last_value=data[i].pctr
+    auc += (tp+tp_pre)*(fp-fp_pre)/2.0
+
+    return auc/(tp*fp)
+
 
 if __name__ == "__main__":
     loss = 0
