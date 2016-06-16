@@ -2,7 +2,8 @@
 # coding=utf-8
 import math
 # 计算LogLoss
-def calcloss(loss, click, pctr):
+def calcloss(click, pctr):
+    loss = 0
     for i in range(1, len(click)):
         if (pctr[i] > 1 or pctr[i] < 0):  # 过滤非法数据
             continue
@@ -12,6 +13,11 @@ def calcloss(loss, click, pctr):
             loss += -math.log(1 - pctr[i])
     return loss / len(click)
 
+if __name__ == "__main__":
+    # 测试数据
+    labels = [1, 1, 0, 1, 1, 0, 1, 0, 1]
+    pctr = [0.68, 0.9, 0.8, 0.3, 0.9, 0.8, 0.5, 0.1, 0.75]
+    print calcloss(labels, pctr)
 
 # 计算auc
 def calcAUC(labels,pctr):
@@ -34,10 +40,9 @@ def calcAUC(labels,pctr):
 
 
 if __name__ == "__main__":
-    loss = 0
     # 测试数据
     labels = [1, 1, 0, 1, 1, 0, 1, 0, 1]
     pctr = [0.68, 0.9, 0.8, 0.3, 0.9, 0.8, 0.5, 0.1, 0.75]
-    print calcloss(loss, labels, pctr)
+    print calcloss(labels, pctr)
     print '----------------------------------'
     print calcAUC(labels, pctr)

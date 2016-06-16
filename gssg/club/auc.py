@@ -39,7 +39,7 @@ def evaluate(ids, true_values, predict_values):
 
 
 if __name__ == "__main__":
-    f = open("test_pctr", "r")  # sys.argv[1]
+    f = open("", "r")  # sys.argv[1]
     ids = []
     true_values = []
     predict_values = []
