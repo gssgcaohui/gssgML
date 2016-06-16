@@ -16,21 +16,21 @@ def calcloss(loss, click, pctr):
 # 计算auc
 def calcAUC(labels,pctr):
     auc = tp = tp_pre = fp = fp_pre = 0.0
-    sortdata = sorted(range(len(pctr)), key=lambda i: pctr[i], reverse=True)
+    sortData = sorted(range(len(pctr)), key=lambda i: pctr[i], reverse=True)
 
-    last_value = pctr[sortdata[0]]
+    last_value = pctr[sortData[0]]
     for i in range(len(labels)):
-        if labels[sortdata[i]] == 1:
+        if labels[sortData[i]] == 1:
             tp += 1
         else:
             fp += 1
-        if last_value != pctr[sortdata[i]]:
+        if last_value != pctr[sortData[i]]:
             auc += (tp + tp_pre) * (fp - fp_pre) / 2.0
             tp_pre = tp
             fp_pre = fp
-            last_value = pctr[sortdata[i]]
+            last_value = pctr[sortData[i]]
         auc += (tp + tp_pre) * (fp - fp_pre) / 2.0
-    return auc, tp, fp, auc / (tp * fp)
+    return auc / (tp * fp)
 
 
 if __name__ == "__main__":
@@ -40,4 +40,4 @@ if __name__ == "__main__":
     pctr = [0.68, 0.9, 0.8, 0.3, 0.9, 0.8, 0.5, 0.1, 0.75]
     print calcloss(loss, labels, pctr)
     print '----------------------------------'
-    print calcAUC(labels,pctr)
+    print calcAUC(labels, pctr)
