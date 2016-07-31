@@ -5,11 +5,9 @@
 
 import os, re, pandas as pd
 
-TRAIN_DATA_PATH = 'K:\chinahadoop\机器学习训练营\训练营作业&代码\文本挖掘项目作业-情感分析\data'
-
 
 # TRAIN_DATA_PATH='data/'
-def clean_train(TRAIN_DATA_PATH='K:\chinahadoop\机器学习训练营\训练营作业&代码\文本挖掘项目作业-情感分析\data', out_train_file_name='thetrain.csv'):
+def clean_train(TRAIN_DATA_PATH='data', out_train_file_name='thetrain.csv'):
     print 'start cleaning train data'
     train_file_names = os.listdir(TRAIN_DATA_PATH)
     train_data_list = []
@@ -37,10 +35,7 @@ def clean_train(TRAIN_DATA_PATH='K:\chinahadoop\机器学习训练营\训练营�
     train_data_pd.to_csv(os.path.join(TRAIN_DATA_PATH, out_train_file_name), index=None, encoding='utf-8', header=True)
 
 
-TEST_DATA_PATH = 'K:\chinahadoop\机器学习训练营\训练营作业&代码\文本挖掘项目作业-情感分析\test'
-
-
-def clean_test(TEST_DATA_PATH='K:\chinahadoop\机器学习训练营\训练营作业&代码\文本挖掘项目作业-情感分析\test', test_file_name='test1.csv', out_test_file_name='thetest.csv'):
+def clean_test(TEST_DATA_PATH='test', test_file_name='test1.csv', out_test_file_name='thetest.csv'):
     print 'start cleaning test data'
     test_file = os.path.join(TEST_DATA_PATH, test_file_name)
 
@@ -53,6 +48,7 @@ def clean_test(TEST_DATA_PATH='K:\chinahadoop\机器学习训练营\训练营作
     # output test data
     test_data_list.to_csv(os.path.join(TEST_DATA_PATH, out_test_file_name), index=None, encoding='utf-8', header=True)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     clean_train()
-    # clean_test()
+    clean_test()
