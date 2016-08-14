@@ -1,9 +1,4 @@
 #-*- coding: UTF-8 -*-
-'''''
-Created on 2016/7/17
-
-@author: chen
-'''
 import csv     #用于处理csv文件
 import random    #用于随机数
 import math
