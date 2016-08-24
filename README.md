@@ -1,3 +1,3 @@
-meachine learning 
+machine learning 
 
 机器学习，python语言
