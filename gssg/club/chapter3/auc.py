@@ -3,7 +3,7 @@
 
 import sys
 
-
+# CTR项目里的ctr代码
 def auc(labels, predicted_ctr):
     print predicted_ctr
     i_sorted = sorted(range(len(predicted_ctr)), key=lambda i: predicted_ctr[i], reverse=True)
