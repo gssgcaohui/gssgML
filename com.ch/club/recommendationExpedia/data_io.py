@@ -1,11 +1,16 @@
-
+#!/usr/bin/ env python
+# coding:utf-8
 import csv
 from operator import itemgetter
 import os
 import json
 import pickle
 import pandas as pd
+'''
+expedia推荐项目
+python版本
 
+'''
 def get_paths():
     paths = json.loads(open("SETTINGS.json").read())
     for key in paths:
