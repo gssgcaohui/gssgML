@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # coding:utf-8
 
+#!/usr/bin/env python
+# coding:utf-8
+
 
 import time
 from PIL import Image
@@ -8,6 +11,14 @@ import glob ,os
 import numpy as np
 from sklearn import preprocessing
 import pandas as pd
+import tensorflow as tf
+
+'''
+train
+'''
+rgb1 = 128
+rgb2 = 128
+rgb3 = 3
 
 
 def dense_to_one_hot(labels_dense,num_classes=25):
@@ -19,7 +30,9 @@ def dense_to_one_hot(labels_dense,num_classes=25):
 
 def shuffle(*arrs):
     arrs =list(arrs)
-    for i ,arr in enumerate(arrs):
+    for i,arr in enumerate(arrs):
+        print len(arrs[0])
+        print i,len(arrs[i])
         assert len(arrs[0]) == len(arrs[i])
         arrs[i] = np.array(arr)
     p = np.random.permutation(len(arrs[0]))
@@ -28,7 +41,9 @@ def shuffle(*arrs):
 def gettrainmatrix(input_path='/home/s-13/image/train_data/'):
     folderList = os.listdir(input_path)
     size = len(sum([i[2] for i in os.walk(input_path)],[]))
-    image_list = np.empty((size,128,128,3),np.float)
+    # 测试数据 1773  1773 * 128 *128 * 3 四维矩阵
+    image_list = np.empty((size,rgb1,rgb2,rgb3),np.float)
+    # 打上类标签  测试集里一共有25类
     labels_list = np.empty((0,25),np.float)
     for label,folder_name in enumerate(folderList,start=0):
         files = os.path.join(input_path,folder_name)
@@ -41,43 +56,50 @@ def gettrainmatrix(input_path='/home/s-13/image/train_data/'):
             for file in file_list:
                 image_path = os.path.join(parent,file)
                 image = np.array(Image.open(image_path))
-                if image.shape == (128,128,3):
+                if image.shape == (rgb1,rgb2,rgb3):
                     image_list[index] = image
                     index +=1
         labels = np.array([label]*file_size).reshape(-1,1)
         if labels.size:
             labels_one_hot = dense_to_one_hot(labels)
             labels_list = np.append(labels_list,labels_one_hot,axis = 0)
-        print "image的格式：",image_list.shape
-        image_list,labels_list = shuffle(image_list,labels_list)
-        return image_list,labels_list
+    print "image的格式：",image_list.shape
+    image_list,labels_list = shuffle(image_list,labels_list)
+    return image_list,labels_list
 
 def gettestmatrix(input_path='/home/s-13/image/test_data/'):
-    test_list = np.empty((1004,128,128,3),np.float)
+    # 测试集 也是四维矩阵
+    test_list = np.empty((1004,rgb2,rgb2,rgb3),np.float)
     index = 0
     for i in range(1004):
-        image_path = input_path + str[i] +'.jpg'
+        image_path = input_path + str(i) +'.jpg'
         image = np.array(Image.open(image_path))
-        if image.shape ==(128,128,3):
+        if image.shape ==(rgb1,rgb2,rgb3):
             test_list[index] = image
             index += 1
     # test_list = shuffle(test_list)
-     return test_list
+    return test_list
 
+############# 下面开始定义神经网络
+# 赋初始值 函数
 def weight_variable(shape):
     initial = tf.truncated_normal(shape,stddev=0.1)
     return tf.Variable(initial)
 
+# 偏置项
 def bias_variable(shape):
     initial = tf.constant(0.1,shape=shape)
     return tf.Variable(initial)
 
+# 卷积神经网络
 def conv2d(x,W):
     return tf.nn.conv2d(x,W,strides=[1,1,1,1],padding='SAME')
 
+# pool 操作
 def max_pool_2x2(x):
     return tf.nn.max_pool(x,ksize=[1,2,2,1],strides=[1,2,2,1],padding='SAME')
 
+# 预测
 def pred(test_xs):
     global prediction
     y_pre = sess.run(prediction,feed_dict={xs:test_xs,keep_prob:1})
@@ -95,18 +117,21 @@ end_time = time.time()
 print "准备数据的时间开销：",end_time - start_time
 
 # define placeholder for inputs to network
-xs = tf.placeholder(tf.float32,[None,128,128,3])
+# 这里用float,不用double，double类型非常耗内存
+xs = tf.placeholder(tf.float32,[None,rgb1,rgb2,rgb3])
 ys = tf.placeholder(tf.float32,[None,25])
 keep_prob = tf.placeholder(tf.float32)
-image_xs = tf.reshape(xs,[-1,128,128,3])
+image_xs = tf.reshape(xs,[-1,rgb1,rgb2,rgb3])
 
 ## conv1 layer
+# 32个 5*5*3 的krenel
 W_conv1 = weight_variable([5,5,3,32])
 b_conv1 = bias_variable([32])
 h_conv1 = tf.nn.relu(conv2d(image_xs,W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
 
 ## conv2 layer
+# 第二层  第一层pool是2*2 本来是128 现在除以2，成了64
 W_conv2 = weight_variable([5,5,32,64])
 b_conv2 = bias_variable([64])
 h_conv2 = tf.nn.relu(conv2d(h_pool1,W_conv2) + b_conv2)
@@ -123,8 +148,9 @@ h_pool2 = max_pool_2x2(h_conv2)
 # b_conv4 = bias_variable([256])
 # h_conv4 = tf.nn.relu(conv2d(h_pool3,W_conv4) + b_conv4)
 # h_pool4 = max_pool_2x2(h_conv4)
-
+############## 全连接层
 ## func1 layer
+# 两个卷基层  128/ 2的2次方 = 32
 W_fc1 = weight_variable([32*32*64,1024])
 b_fc1 = bias_variable([1024])
 # [n_samples,7,7,64] ->> [n_samples,7*7*64]
@@ -133,19 +159,23 @@ h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat,W_fc1) + b_fc1)
 h_fc1_drop = tf.nn.dropout(h_fc1,keep_prob)
 
 ## func2 layer
+# 25类
 W_fc2 = weight_variable([1024,25])
 b_fc2 = bias_variable([25])
 prediction = tf.nn.softmax(tf.matmul(h_fc1_drop,W_fc2) + b_fc2)
 
+
 # the error between prediction and real data
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),reduction_indices=[1]))
-train_step = tf.train.AdamOptimizer(le-4).minimize(cross_entropy)
+train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
+# 开启sessiong
 sess = tf.Session()
 
 # important step
 sess.run(tf.initialize_all_variables())
-batch_size = 128
+# 2的整数倍即可
+batch_size = 64
 for i in range(20):
     print "第%d轮" % i
     data_size = image_list.shape[0]
@@ -159,14 +189,5 @@ for i in range(20):
         print "lll"
         start += batch_size
         #
-        #
-        #
-        #
-        #
         test_xs = gettestmatrix()
         pred(test_xs)
-
-
-
-
-
