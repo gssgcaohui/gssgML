@@ -4,6 +4,8 @@
 Created on 4 Jul 2016
 
 @author: Bin Liang (bliang@csu.edu.au)
+KNN分类，决策边界
+
 '''
 from scipy.spatial import distance
 import operator

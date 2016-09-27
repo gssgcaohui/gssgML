@@ -10,6 +10,7 @@ from itsdangerous import NoneAlgorithm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
+#from CleanData import clean_train, clean_test
 from sklearn.ensemble.forest import RandomForestClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import metrics

@@ -1,6 +1,6 @@
 #!/usr/bin/ env python
 # coding: utf-8
-import os,sys,urllib2,sys,re
+import os,requests,sys,urllib2,sys,re
 #import requests
 from lxml import etree
 

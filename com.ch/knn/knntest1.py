@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 ''' 数据读入 '''
 data   = []
 labels = []
-with open("1.txt") as ifile:
+with open("data/1.txt") as ifile:
         for line in ifile:
             tokens = line.strip().split(' ')
             data.append([float(tk) for tk in tokens[:-1]])

@@ -66,7 +66,7 @@ def main():
     trainingSet = []  #训练数据集
     testSet = []      #测试数据集
     split = 0.67      #分割的比例
-    loadDataset(r"data2.txt", split, trainingSet, testSet)
+    loadDataset(r"data/data2.txt", split, trainingSet, testSet)
     print "Train set :" + repr(len(trainingSet))
     print "Test set :" + repr(len(testSet))
 
