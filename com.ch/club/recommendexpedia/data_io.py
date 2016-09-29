@@ -6,23 +6,27 @@ import os
 import json
 import pickle
 import pandas as pd
+
 '''
 expedia推荐项目
 python版本
 '''
+
+
 def get_paths():
     paths = json.loads(open("SETTINGS.json").read())
     for key in paths:
-        paths[key]=os.path.expandvars(paths[key])
+        paths[key] = os.path.expandvars(paths[key])
     return paths
 
+# 读取train文件
 def read_train(nrows=None):
-    train_path=get_paths()["train_path"]
+    train_path = get_paths()["train_path"]
 
-    # get column names
-    col_names = pd.read_csv(train_path,nrows=1).columns.tolist()
+    # get column names  获取列名
+    col_names = pd.read_csv(train_path, nrows=1).columns.tolist()
 
-    # extract useful column
+    # extract useful column 去除不需要的列
     col_names.remove("click_bool")
     col_names.remove("gross_bookings_usd")
     col_names.remove("date_time")
@@ -30,14 +34,16 @@ def read_train(nrows=None):
     # col_names.remove("booking_bool")
 
     if nrows == None:
-        train_samples = pd.read_csv(train_path,usecols=col_names)
+        train_samples = pd.read_csv(train_path, usecols=col_names)
         # targets = pd.read_csv(train_path,usecols=['booking_bool'])
     else:
-        train_samples = pd.read_csv(train_path,usecols=col_names,nrows=nrows)
+        # 如果设置了行数，就是进行小批量的数据进行测试
+        train_samples = pd.read_csv(train_path, usecols=col_names, nrows=nrows)
         # targets = pd.read_csv(train_path,usecols=['booking_bool'],nrows=nrows)
 
     # return train_samples,tragets
     return train_samples
+
 
 def read_test(nrows=None):
     test_path = get_paths()["test_path"]
@@ -49,17 +55,3 @@ def read_test(nrows=None):
     col_names.remove("date_time")
     col_names.remove("position")
     # col_names.remove("booking_bool")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
