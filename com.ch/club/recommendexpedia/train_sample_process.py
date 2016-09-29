@@ -7,13 +7,14 @@ import numpy as np
 import os
 from data_io import get_paths
 from feature_extraction import extract_features
+
 '''
 数据预处理
 
 '''
 
 
-def process_train_samples(samples,max_srch_size=10,each_saved_size=1000000):
+def process_train_samples(samples, max_srch_size=10, each_saved_size=1000000):
     '''
     func:
     Process samples including feature extraction and downsampling
@@ -25,29 +26,30 @@ def process_train_samples(samples,max_srch_size=10,each_saved_size=1000000):
     '''
 
     # 训练集数据乱序，这里先拍下序，相同srch_id的数据放一块
-    sorted_samples = samples.sort_values(by = ['srch_id']) # grou by srch_id
-    sorted_samples = sorted_samples.reset_index(drop=True) # reset row index
+    sorted_samples = samples.sort_values(by=['srch_id'])  # grou by srch_id
+    sorted_samples = sorted_samples.reset_index(drop=True)  # reset row index
     processed_samples = pd.DataFrame()
 
     samples_in_one_srch = pd.DataFrame()
     # for 循环处理的就是下一个srch_id是不是与上一个相同
-    for r_idx,sample in sorted_samples.iterrows():
-        if (r_idx + 1)% 1000 ==0:
-            print "processed %i sample of %i " %(r_idx+1,sorted_samples.shape[0])
+    for r_idx, sample in sorted_samples.iterrows():
+        if (r_idx + 1) % 1000 == 0:
+            print "processed %i sample of %i " % (r_idx + 1, sorted_samples.shape[0])
 
-        is_next_in_same_search =True
-        samples_in_one_srch = pd.concat((sample.to_frame().transpose(),samples_in_one_srch),axis=0)
+        is_next_in_same_search = True
+        samples_in_one_srch = pd.concat((sample.to_frame().transpose(), samples_in_one_srch), axis=0)
 
         current_srch_id = sample['srch_id']
 
         # 最后一行
-        if(r_idx +1) == sorted_samples.shape[0]:
-            is_next_in_same_search=False
+        if (r_idx + 1) == sorted_samples.shape[0]:
+            is_next_in_same_search = False
         else:
-            next_srch_id = sorted_samples['srch_id'][r_idx+1]
+            next_srch_id = sorted_samples['srch_id'][r_idx + 1]
             if current_srch_id != next_srch_id:
-                is_next_in_same_search=False
+                is_next_in_same_search = False
 
+        # 正好是一组srch_id ，进行特征提取
         if not is_next_in_same_search:
             ## if next one is not in the same search process the samples in the same search
 
@@ -56,13 +58,6 @@ def process_train_samples(samples,max_srch_size=10,each_saved_size=1000000):
 
             # downsample samples
             n_samples = ext_samples_in_one_srch.shape[0]
-
-
-
-
-
-
-
 
 
 def do_train_samples_processing():
@@ -82,6 +77,5 @@ def do_train_samples_processing():
     print "Processing training data done"
 
 
-
-if __name__=="main":
+if __name__ == "main":
     do_train_samples_processing()
