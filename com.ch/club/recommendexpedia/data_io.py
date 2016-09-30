@@ -55,3 +55,31 @@ def read_test(nrows=None):
     col_names.remove("date_time")
     col_names.remove("position")
     # col_names.remove("booking_bool")
+
+def load_model(model_name=None):
+    if model_name is None:
+        in_path = get_paths()["model_path"]
+    else:
+        path,_ = os.path.split(get_paths()["model_path"])
+        in_path = os.path.join(path,model_name)
+    return pickle.load(open(in_path))
+
+def write_submission(recommendations,submission_file=None):
+    if submission_file is None:
+        submission_path = get_paths()["submission_path"]
+    else:
+        path,file_name = os.path.split(get_paths()["submission_path"])
+        submission_path = os.path.join(path,submission_file)
+    path,_ = os.path.split(submission_path)
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    # 要强制转为int型
+    rows =[(int(srch_id),int(prop_id))
+           for srch_id,prop_id,rank_float
+           # 在一组里面，
+           # 0是srch_id 1 是prop_id 2是按照什么排序 这里是说在一组里，按照rank_float进行排序，默认升序
+           in sorted(recommendations,key=itemgetter(0,2))]
+    writer = csv.writer(open(submission_path,"w"),lineterminator="\n")
+    writer.writerow(["TARGET"])
+    writer.writerow(rows)

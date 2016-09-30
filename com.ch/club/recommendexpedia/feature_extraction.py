@@ -2,7 +2,7 @@
 # coding:utf-8
 
 def normalize_series(pd_series):
-    normalize_series=(pd_series - pd_series.mean()) / (pd_series.max() - pd_series.min())
+    norm_pd_series=(pd_series - pd_series.mean()) / (pd_series.max() - pd_series.min())
     norm_pd_series = norm_pd_series.fillna(value=0)
 
     return norm_pd_series
