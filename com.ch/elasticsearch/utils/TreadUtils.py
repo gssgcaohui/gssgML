@@ -1,6 +1,7 @@
 # coding=utf-8
 '''
-Thread Test
+ Python Thread Demo
+three methods for create thread
 '''
 
 import thread
