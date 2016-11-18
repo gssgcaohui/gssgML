@@ -15,7 +15,9 @@ from scipy.stats import norm, poisson
 from scipy.interpolate import BarycentricInterpolator
 # from scipy.interpolate import CubicSpline
 import math
-
+'''
+python 机器学习库练习
+'''
 
 def residual(t, x, y):
     return y - (t[0] * x ** 2 + t[1] * x + t[2])
@@ -141,8 +143,8 @@ if __name__ == "__main__":
     # plot.show()
     print a
     # 加上折线
-    b=a[0]
-    plot.plot(np.arange(pillar),b,'r--',linewidth=2)
+    b = a[0]
+    plot.plot(np.arange(pillar), b, 'r--', linewidth=2)
     plot.show()
     print a[0].sum()
 
@@ -173,15 +175,17 @@ if __name__ == "__main__":
     # plot.show()
 
     # 7. 绘制三维图像
-    # x, y = np.ogrid[-3:3:100j, -3:3:100j]
-    # # u = np.linspace(-3, 3, 101)
-    # # x, y = np.meshgrid(u, u)
-    # z = x*y*np.exp(-(x**2 + y**2)/2) / math.sqrt(2*math.pi)
+    # # x, y = np.ogrid[-3:3:100j, -3:3:100j]
+    # u = np.linspace(-3, 3, 101)
+    # x, y = np.meshgrid(u, u)
+    # # z = x * y * np.exp(-(x ** 2 + y ** 2) / 2) / math.sqrt(2 * math.pi)
+    # z = np.exp(-(x**2 + y**2)/2) / math.sqrt(2*math.pi)
+    # # z = x*np.exp(-(x**2 + y**2)/2) / math.sqrt(2*math.pi)
     # # z = x*y*np.exp(-(x**2 + y**2)/2) / math.sqrt(2*math.pi)
     # fig = plot.figure()
     # ax = fig.add_subplot(111, projection='3d')
-    # # ax.plot_surface(x, y, z, rstride=5, cstride=5, cmap=cm.coolwarm, linewidth=0.1)  #
-    # ax.plot_surface(x, y, z, rstride=3, cstride=3, cmap=cm.Accent, linewidth=0.5)
+    # ax.plot_surface(x, y, z, rstride=5, cstride=5, cmap=cm.coolwarm, linewidth=0.1)  #
+    # # ax.plot_surface(x, y, z, rstride=3, cstride=3, cmap=cm.Accent, linewidth=0.5)
     # plot.show()
     # # cmaps = [('Perceptually Uniform Sequential',
     # #           ['viridis', 'inferno', 'plasma', 'magma']),
@@ -209,7 +213,7 @@ if __name__ == "__main__":
     # A, B, C = 2, 3, -1
     # y = (A * x ** 2 + B * x + C) + np.random.rand(len(x))*0.75
     #
-    # t = leastsq(residual, [0, 0, 0], args=(x, y))zw
+    # t = leastsq(residual, [0, 0, 0], args=(x, y))
     # theta = t[0]
     # print '真实值：', A, B, C
     # print '预测值：', theta
@@ -239,8 +243,8 @@ if __name__ == "__main__":
 
     # # 8.2 使用scipy计算函数极值
     # a = opt.fmin(f, 1)
-    # b = opt.fmin_cg(f, 1)
-    # c = opt.fmin_bfgs(f, 1)
+    # b = opt.fmin_cg(f, 1)  # 共轭梯度
+    # c = opt.fmin_bfgs(f, 1) # bfgs
     # print a, 1/a, np.e
     # print b
     # print c

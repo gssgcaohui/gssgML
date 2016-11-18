@@ -52,51 +52,51 @@ if __name__ == "__main__":
     print y
 
     # 绘制1  第三个参数是颜色和样式
-    # plt.plot(data['TV'], y, 'ro', label='TV')
-    # plt.plot(data['Radio'], y, 'g^', label='Radio')
-    # plt.plot(data['Newspaper'], y, 'b*', label='Newspaer')
-    # plt.legend(loc='lower right')
-    # plt.grid()
-    # plt.show()
-
-    # 绘制2 单独展示
-    # plt.figure(figsize=(9, 12)) # 宽 高
-    # plt.subplot(311) # 3行 1列 第一列
-    # plt.plot(data['TV'], y, 'ro')
-    # plt.title('TV')
-    # plt.grid()
-    # plt.subplot(312)
-    # plt.plot(data['Radio'], y, 'g^')
-    # plt.title('Radio')
-    # plt.grid()
-    # plt.subplot(313)
-    # plt.plot(data['Newspaper'], y, 'b*')
-    # plt.title('Newspaper')
-    # plt.grid()
-    # plt.tight_layout() # 样式紧一下
-    # plt.show()
-
-    # 调用sklearn中交叉验证的包  默认train 75% test 25%
-    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
-    # print x_train, y_train
-    linreg = LinearRegression()
-    model = linreg.fit(x_train, y_train)
-    # print x_train.shape
-    # print x_test.shape
-    print model
-    print linreg.coef_  # 系数  y= aX1 + bX2 + cX3 + r
-    print linreg.intercept_  # 误差值，就是r
-
-    # 均方误差
-    y_hat = linreg.predict(x_test)
-    mse = np.average((y_hat - y_test) ** 2)  # Mean Squared Error
-    rmse = np.sqrt(mse)  # Root Mean Squared Error
-    print mse, rmse
-
-    # 画出来 预测值和真实值
-    t = np.arange(len(x_test))
-    plt.plot(t, y_test, 'r-', linewidth=2, label='Test')
-    plt.plot(t, y_hat, 'g-', linewidth=2, label='Predict')
-    plt.legend(loc='upper right')
+    plt.plot(data['TV'], y, 'ro', label='TV')
+    plt.plot(data['Radio'], y, 'g^', label='Radio')
+    plt.plot(data['Newspaper'], y, 'b*', label='Newspaer')
+    plt.legend(loc='lower right')
     plt.grid()
     plt.show()
+
+    # 绘制2 单独展示
+    plt.figure(figsize=(9, 12)) #  高 宽
+    plt.subplot(311) # 3行 1列 第一行
+    plt.plot(data['TV'], y, 'ro')
+    plt.title('TV')
+    plt.grid()
+    plt.subplot(312)
+    plt.plot(data['Radio'], y, 'g^')
+    plt.title('Radio')
+    plt.grid()
+    plt.subplot(313)
+    plt.plot(data['Newspaper'], y, 'b*')
+    plt.title('Newspaper')
+    plt.grid()
+    plt.tight_layout() # 样式紧一下
+    plt.show()
+
+    # 调用sklearn中交叉验证的包  默认train 75% test 25%
+    # x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1)
+    # # print x_train, y_train
+    # linreg = LinearRegression()
+    # model = linreg.fit(x_train, y_train)
+    # # print x_train.shape
+    # # print x_test.shape
+    # print model
+    # print linreg.coef_  # 系数  y= aX1 + bX2 + cX3 + r
+    # print linreg.intercept_  # 误差值，就是r
+    #
+    # # 均方误差
+    # y_hat = linreg.predict(x_test)
+    # mse = np.average((y_hat - y_test) ** 2)  # Mean Squared Error
+    # rmse = np.sqrt(mse)  # Root Mean Squared Error
+    # print mse, rmse
+
+    # 画出来 预测值和真实值
+    # t = np.arange(len(x_test))
+    # plt.plot(t, y_test, 'r-', linewidth=2, label='Test')
+    # plt.plot(t, y_hat, 'g-', linewidth=2, label='Predict')
+    # plt.legend(loc='upper right')
+    # plt.grid()
+    # plt.show()
