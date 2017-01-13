@@ -15,9 +15,11 @@ from scipy.stats import norm, poisson
 from scipy.interpolate import BarycentricInterpolator
 # from scipy.interpolate import CubicSpline
 import math
+
 '''
 python 机器学习库练习
 '''
+
 
 def residual(t, x, y):
     return y - (t[0] * x ** 2 + t[1] * x + t[2])
@@ -248,3 +250,18 @@ if __name__ == "__main__":
     # print a, 1/a, np.e
     # print b
     # print c
+
+    # 各种损失函数
+    xmin, xmax = -3, 3
+    xx = np.linspace(xmin, xmax, 100)
+    plot.plot([xmin, 0, 0, xmax], [1, 1, 0, 0], 'k-', label="Zero-one loss")
+    plot.plot(xx, np.where(xx < 1, 1 - xx, 0), 'g-', label="Hinge loss")
+    plot.plot(xx, np.log2(1 + np.exp(-xx)), 'r-', label="Log loss")
+    plot.plot(xx, np.exp(-xx), 'c-', label="Exponential loss")
+    plot.plot(xx, -np.minimum(xx, 0), 'm-', label="Perceptron loss")
+
+    plot.ylim((0, 7))
+    plot.legend(loc="upper right")
+    plot.xlabel(r"Decision function $f(x)$")
+    plot.ylabel("$L(y, f(x))$")
+    plot.show()

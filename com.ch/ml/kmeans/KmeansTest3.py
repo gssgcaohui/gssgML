@@ -1,6 +1,7 @@
 #!/usr/bin/python env
 # coding:utf-8
 from numpy import *
+import numpy as np
 from matplotlib import pyplot as plt
 
 
@@ -40,6 +41,27 @@ def getMarks():
     return mark, markpoint
 
 
+# kmeans++  限制初值选的
+def KMeans2(data, k):
+    m = len(data)
+    n = len(data[0])
+
+    cluster_center = np.zeros((k, n))
+    j = np.random.randint(m)
+    cluster_center[0] = data[j][:]
+    dis = np.zeros(m) - 1
+    i = 0
+    while i < k - 1:
+        for j in range(m):
+            d = (cluster_center[i] - data[j]) ** 2
+            d = np.sum(d)
+            if (dis[j] < 0) or dis[j] > d:
+                dis[j] = d
+        j = np.random_select(dis)
+        i += 1
+        cluster_center[i] = data[j][:]
+
+
 def kMeans(dataSet, k, distMeas=distEclud, createCent=randCent):
     m = shape(dataSet)[0]
     clusterAssment = mat(zeros((m, 2)))  # create mat to assign data points
@@ -51,6 +73,8 @@ def kMeans(dataSet, k, distMeas=distEclud, createCent=randCent):
     while clusterChanged:
         clusterChanged = False
         for i in range(m):  # for each data point assign it to the closest centroid
+            # if np.random.random() * m > 100:
+            #     continue
             minDist = inf
             minIndex = -1
             for j in range(k):
@@ -58,7 +82,7 @@ def kMeans(dataSet, k, distMeas=distEclud, createCent=randCent):
                 if distJI < minDist:
                     minDist = distJI
                     minIndex = j
-            print "value=",clusterAssment[i, 0] ,",minIndex=", minIndex
+            print "value=", clusterAssment[i, 0], ",minIndex=", minIndex
             if clusterAssment[i, 0] != minIndex:
                 clusterChanged = True
             clusterAssment[i, :] = minIndex, minDist ** 2
@@ -96,13 +120,15 @@ def Finalyshow(dataSet, k, centroids, clusterAssment):
     plt.tight_layout()
     plt.show()
 
+
 def main():
-    dataMat = mat(loadDataSet('data/testSet80.txt'))
+    dataMat = mat(loadDataSet('data/testSet.txt'))
     # print type(dataMat) # <class 'numpy.matrixlib.defmatrix.matrix'>
     k = 4
     myCentroids, clustAssing = kMeans(dataMat, k)
     print myCentroids
     Finalyshow(dataMat, k, myCentroids, clustAssing)
+
 
 if __name__ == "__main__":
     main()
