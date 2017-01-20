@@ -6,7 +6,7 @@ import os, requests, sys, urllib2, sys, re
 from bs4 import BeautifulSoup
 import csv
 '''
- 豆瓣电视剧
+ 豆瓣电视剧名称  主演
 '''
 reload(sys)
 # 写中文
@@ -21,17 +21,19 @@ def write_file(file_name, writer_name, agree, comment, postings):
 
 
 if __name__ == '__main__':
-    dictionary = "data/douban"
+    dictionary = "data/douban/"
     if not os.path.exists(dictionary):
         os.mkdir(dictionary)
-    f_all = open(dictionary + 'all.txt', mode='w')
-    f = open(u'data/电视剧.csv', 'wb')
-    f.write(unicode('\xEF\xBB\xBF', 'utf-8'))   # 文件头
-    writer = csv.writer(f)
-    writer.writerow(['电视剧名称','类型', '上映时间', '主演', '评分'])
+    f_tv = open(dictionary + 'tvName.txt', mode='w')
+    f_star = open(dictionary + 'starRole.txt', mode='w')
+    # f = open(u'data/电视剧.csv', 'wb')
+    # f.write(unicode('\xEF\xBB\xBF', 'utf-8'))   # 文件头
+    # writer = csv.writer(f)
+    # writer.writerow(['电视剧名称','类型', '上映时间', '主演', '评分'])
 
+    starList = ['']
     for page in range(0, 100):
-        print page*15
+        # print page*15
         url = u'https://www.douban.com/tag/国产电视剧/movie?start='+str(page*15)
         headers = {'User-Agent': 'Mozilla/4.0 (compatible;MSIE 5.5; Windows NT)'}
         try:
@@ -49,24 +51,43 @@ if __name__ == '__main__':
                                  '.*?<span class="rating_nums">(.*?)</span>', re.S)
 
             items = re.findall(pattern, content)
+            # starList=['']
+
             for i, item in enumerate(items):
                 postings = re.match(r'^(.*?)(\d+)(.*?)$', item[2].strip().replace("/", ' '))
                 # 中国大陆 / 剧情 / 悬疑 / 惊悚 / 2016 / 孔笙 / 靳东 / 陈乔恩 / 赵达
+                if  len(item[0])==0:
+                    break
                 print '电视剧名称:', item[0]
                 print '产地:', item[1].strip()
                 print '类型:', postings.group(1).strip()
                 print '上映时间:', postings.group(2).strip()
                 print '主演:', postings.group(3).strip()
                 print '评分:', item[3]
-                writer.writerow(
-            [item[0], postings.group(1).strip(), postings.group(2).strip(), postings.group(3).strip(),item[3]])
+
+                # print starList + postings.group(3).strip().split(" +")
+                f_tv.write(item[0])
+                f_tv.write('\n')
+                # tmpList = starList + postings.group(3).strip().split(' ')
+                # tmpSet = set(tmpList)
+                # starList = list(tmpSet)
+                # starList = starList +tmpList
+                starList = list(set(starList + postings.group(3).strip().split(' ')))
+                # starList =list(set(starList +list(postings.group(3).strip().split(" "))))
+                # print "star=",len(starList),str(starList).replace('u\'','\'').decode("unicode-escape")
+
+            # print "star=", len(starList),len(list(set(starList)))
+
+                # writer.writerow(
+            # [item[0], postings.group(1).strip(), postings.group(2).strip(), postings.group(3).strip(),item[3]])
 
         except urllib2.URLError, e:
-            if hasattr(e, "code"):
-                print e.code
-            if hasattr(e, "reason"):
-                print e.reason
-            break
+            print "error=",e
+        #     if hasattr(e, "code"):
+        #         print "e.code=",e.code
+        #     if hasattr(e, "reason"):
+        #         print "e.reason=",e.reason
+        #     break
 
     # for page in range(1, 100):
     #     url = u'https://www.douban.com/tag/国产电视剧/?focus=movie'
@@ -102,4 +123,9 @@ if __name__ == '__main__':
     #         if hasattr(e, "reason"):
     #             print e.reason
     #         break
-    f_all.close()
+
+    for star in starList:
+        f_star.write(star.strip())
+        f_star.write('\n')
+    f_tv.close()
+    f_star.close()
