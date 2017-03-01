@@ -21,13 +21,15 @@ def calcloss(labels, pctr):
             loss += -math.log(1 - pctr[i])
     return loss / len(labels)
 
-# if __name__ == "__main__":
-#     # 测试数据
-#     labels = [1, 1, 0, 1, 1, 0, 1, 0, 1]
-#     # pctr = [0.68, 0.9, 0.8, 0.3, 0.9, 0.8, 0.5, 0.1, 0.75]   # 0.635528825464
-#     # pctr = [0.68, 0.9, 0.1, 0.3, 0.9, 0.2, 0.5, 0.1, 0.75]      # 0.31437640792
-#     pctr = [0.99, 0.99, 0.1, 0.99, 0.99, 0.1, 0.99, 0.1, 0.99]      # 0.0407036918046
-#     print calcloss(labels, pctr)
+if __name__ == "__main__":
+    # 测试数据
+    labels = [1, 1, 0, 1, 1, 0, 1, 0, 1]
+
+    # pctr = [0.68, 0.9, 0.8, 0.3, 0.9, 0.8, 0.5, 0.1, 0.75]   # 0.635528825464
+    # pctr = [0.68, 0.9, 0.1, 0.3, 0.9, 0.2, 0.5, 0.1, 0.75]      # 0.31437640792
+    # pctr = [0.99, 0.99, 0.1, 0.99, 0.99, 0.1, 0.99, 0.1, 0.99]      # 0.0407036918046
+    pctr = [1, 1, 0, 1, 1, 0, 1, 0, 1] # 0.0
+    print calcloss(labels, pctr)
 
 def logloss(true_labels, pred_labels, eps=1e-15):
     # 对预测值进行处理
@@ -51,18 +53,18 @@ def evaluate(ids, true_values, predict_values):
     return calcloss(labels, predicted_ctr)  # 0.264946717889
     # return logloss(labels, predicted_ctr)  # 0.264947304759
 
-if __name__ == "__main__":
-    f = open("pctr.txt", "r")
-    ids = []
-    true_values = []
-    predict_values = []
-    for line in f:
-        seg = line.strip().split(",")
-        # 三列分别为序号列，真实值lable，预测值pctr
-        ids.append(seg[0])
-        true_values.append(seg[1])
-        predict_values.append(seg[2])
-    print evaluate(ids, true_values, predict_values)
+# if __name__ == "__main__":
+#     f = open("pctr.txt", "r")
+#     ids = []
+#     true_values = []
+#     predict_values = []
+#     for line in f:
+#         seg = line.strip().split(",")
+#         # 三列分别为序号列，真实值lable，预测值pctr
+#         ids.append(seg[0])
+#         true_values.append(seg[1])
+#         predict_values.append(seg[2])
+#     print evaluate(ids, true_values, predict_values)
 
 # 计算auc
 def calcAUC(labels,pctr):
