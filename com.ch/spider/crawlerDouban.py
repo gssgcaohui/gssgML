@@ -41,7 +41,7 @@ if __name__ == '__main__':
             response = urllib2.urlopen(request)
             content = response.read().decode('utf-8')
 
-            # 到510的时候就被屏蔽了
+            # 到510的时候就没有了
 
             # print content
             # content = request.get(url)

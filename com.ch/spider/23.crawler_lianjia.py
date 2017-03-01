@@ -30,7 +30,7 @@ if __name__ == '__main__':
         print district['title']
         district_name = district.text   # '东城', '西城', '朝阳', '海淀'......
         url = '%s%s' % (url_main, district['href'])
-        # print url
+        print url
         res = requests.get(url)
         res = res.text.encode(res.encoding).decode('utf-8')
         soup = BeautifulSoup(res,'html.parser')
@@ -46,6 +46,7 @@ if __name__ == '__main__':
             res = res.text.encode(res.encoding).decode('utf-8')
             soup = BeautifulSoup(res, 'html.parser')
             # print soup.prettify()
+            # find 是找到一个，find_all是找到所有
             sells = soup.find(name='ul', attrs={'class':'sellListContent', 'log-mod':'list'})
             if not sells:
                 continue
